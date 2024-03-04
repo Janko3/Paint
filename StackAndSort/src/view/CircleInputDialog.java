@@ -9,8 +9,8 @@ import java.awt.event.*;
 
 public class CircleInputDialog extends JDialog {
     private JPanel contentPane;
-    private JButton buttonOK;
-    private JButton buttonCancel;
+    private JButton buttonOK = new JButton("OK");
+    private JButton buttonCancel = new JButton("CANCEL");
     private Circle circle;
     private JTextField xTxtField;
     private JTextField yTxtField;
@@ -18,26 +18,34 @@ public class CircleInputDialog extends JDialog {
     boolean isOk;
 
     public CircleInputDialog() {
-        setContentPane(contentPane);
+
+        contentPane = new JPanel();
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
         setTitle("Add Circle");
         xTxtField = new JTextField(10);
         yTxtField = new JTextField(10);
         r = new JTextField(10);
-        this.circle = new Circle();
+        circle = new Circle(); // Initialize circle
+
+        // Set content pane of the dialog
+        setContentPane(contentPane);
+
+        // Add components to contentPane
         contentPane.add(new JLabel("X Coordinate: "));
         contentPane.add(xTxtField);
         contentPane.add(new JLabel("Y Coordinate: "));
         contentPane.add(yTxtField);
         contentPane.add(new JLabel("Radius: "));
         contentPane.add(r);
+        contentPane.add(buttonOK);
+        contentPane.add(buttonCancel);
+
         setCircle();
 
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
                 if (xTxtField.getText().trim().isEmpty() || r.getText().trim().isEmpty() || yTxtField.getText().trim().isEmpty()) {
                     isOk = false;
                     JOptionPane.showMessageDialog(null, "Enter in all the values!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -72,7 +80,7 @@ public class CircleInputDialog extends JDialog {
     }
 
     private void onOK() {
-        // add your code here
+        setCircle(); // Set Circle properties here
         dispose();
     }
 
@@ -120,9 +128,19 @@ public class CircleInputDialog extends JDialog {
     }
 
     public void setCircle() {
-        Point p = new Point(Integer.parseInt(xTxtField.getText()), Integer.parseInt(yTxtField.getText()));
-        circle.setCenter(p);
-        circle.setRadius(Integer.parseInt(r.getText()));
+        try {
+            int x = Integer.parseInt(xTxtField.getText().trim());
+            int y = Integer.parseInt(yTxtField.getText().trim());
+            int radius = Integer.parseInt(r.getText().trim());
+
+            Point p = new Point(x, y);
+            circle.setCenter(p);
+            circle.setRadius(radius);
+        } catch (NumberFormatException e) {
+            // Handle the case when one or more text fields contain non-integer or empty values
+            JOptionPane.showMessageDialog(null, "Please enter valid integer values for coordinates and radius!", "Error", JOptionPane.ERROR_MESSAGE);
+            getToolkit().beep();
+        }
     }
 
     {

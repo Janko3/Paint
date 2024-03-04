@@ -82,7 +82,9 @@ public class Drawing extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 PnlDrawing.obj = 3;
                 CircleInputDialog circleInputDialog = new CircleInputDialog();
-                circleInputDialog.setVisible(true);
+                circleInputDialog.setSize(300, 300); // Set size if necessary
+                circleInputDialog.setLocationRelativeTo(null); // Set location
+                circleInputDialog.setVisible(true); // Make the dialog visible
             }
         });
         btnSelect.addActionListener(new ActionListener() {
